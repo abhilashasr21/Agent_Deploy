@@ -1,0 +1,32 @@
+#Create a YML code for GitHub Actions to run Terraform Code
+on:
+  push:
+    branches:
+      - main
+
+# It runs after every push to the main branch.
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.6
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+
+ #   - name: Terraform Apply
+ #     if: github.ref == 'refs/heads/main'
+ #     run: terraform apply -auto-approve tfplan
